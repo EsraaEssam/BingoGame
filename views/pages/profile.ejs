@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  
+    <% include ../partials/head %>
+    <body class="">
+        <div class="content gradBackground">
+            <% include ../partials/navbar %>
+            <div class="container">
+                <div class="row ">
+					
+					
+					<div class="col-md-12">
+						<ul class="nav nav-tabs">
+							<li class="active"><a data-toggle="tab" href="#sectionA">Basic information</a></li>
+							<li><a data-toggle="tab" href="#sectionB">Histroy</a></li>
+						</ul>
+						
+						<div class="tab-content">
+							
+							<div id="sectionA" class="tab-pane fade in active ">
+							<div class="col-md-3">
+								<img src="<%= pp_img %>" class="img-responsive img-rounded" alt="profile Picture"><br>
+								
+							</div>
+							<div class="col-md-9">
+								<h2 class="h2" id="Username_profile">Username</h2>
+								<h4 class="h4" id="Email_profile">Email</h4>
+								<h4 class="h4">Score: <%= score %></h4>
+							</div>
+							</div>
+							<div id="sectionB" class="tab-pane fade">
+								<div class="table-responsive">
+									<table class="table table-striped table-custom">
+									<tr>
+									<td>Opponent</td>
+									<td>Winner</td>
+									</tr>
+										<% History.forEach(function(match) { %>
+											<tr>
+											<td><%= match.op %> </td>
+											<td><%= match.winner %></td>
+											</tr>
+										<% }); %>
+									</table>
+								</div>
+							</div>
+						
+						</div>
+					</div>
+                </div>
+                
+                
+                
+                
+                </div>
+                </div>
+            </div>
+            </div>
+    
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/socket.io.js"></script>
+        <script>
+       
+        </script>
+    </body>
+</html>

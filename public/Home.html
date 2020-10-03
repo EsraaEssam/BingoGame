@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      
+      <link rel="stylesheet" href="css/bootstrap.css">
+      <link rel="stylesheet" href="css/MyStyle.css">
+      
+     <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+     <![endif]-->
+      <script src="js/jquery-2.1.4.min.js"></script>
+      <script src="js/game.js"></script>
+      <title>Bingo!</title>
+  </head>
+    
+    <body class="gradBackground">
+        <div class="content">
+            <nav class="navbar navbar-default navbar-fixed-top ">
+                <div class="container-fluid ">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#" style="color:white;">Bingo!</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="active"><a href="#">Home</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="LogOut.html">Log out</a></li>
+                            <li><a href="#">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="container ">
+                <div class="row" id="startGameRow">
+                <div class="col-md-4 col-md-offset-4 ">
+                <h1 class="bingoHeader">BINGO</h1>    
+                </div>
+				<div class="col-md-7 col-md-offset-4">
+                <button class="btn btn-default startGameStyle" id="startGame">Start game</button>    
+                </div>
+                </div>
+
+		
+
+                <div class="row">
+                <!-- <div class="col-md-4 col-md-offset-4"> -->
+                <div class="col-md-6 col-md-offset-3">
+					<!--raniatarek-->
+					<p id="bingoText"><span id="B">B</span><span id="I">I</span><span id="N">N</span><span id="G">G</span><span id="O">O</span> </p>
+				</div>
+				<div class="col-md-6 col-md-offset-3">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-custom">
+                        <tr>
+                            <td id="num00" class="Bingotd">1</td>
+                            <td id="num01" class="Bingotd">2</td> 
+                            <td id="num02" class="Bingotd">3</td>
+                            <td id="num03" class="Bingotd">4</td>
+                            <td id="num04" class="Bingotd">5</td>
+                        </tr>
+                        <tr>
+                            <td id="num10" class="Bingotd">1</td>
+                            <td id="num11" class="Bingotd">2</td> 
+                            <td id="num12" class="Bingotd">3</td>
+                            <td id="num13" class="Bingotd">4</td>
+                            <td id="num14" class="Bingotd">5</td>
+                        </tr>
+                        <tr>
+                            <td id="num20" class="Bingotd">1</td>
+                            <td id="num21" class="Bingotd">2</td> 
+                            <td id="num22" class="Bingotd">3</td>
+                            <td id="num23" class="Bingotd">4</td>
+                            <td id="num24" class="Bingotd">5</td>
+                        </tr>
+                        <tr>
+                            <td id="num30" class="Bingotd">1</td>
+                            <td id="num31" class="Bingotd">2</td> 
+                            <td id="num32" class="Bingotd">3</td>
+                            <td id="num33" class="Bingotd">4</td>
+                            <td id="num34" class="Bingotd">5</td>
+                        </tr>
+                        <tr>
+                            <td id="num40" class="Bingotd">1</td>
+                            <td id="num41" class="Bingotd">2</td> 
+                            <td id="num42" class="Bingotd">3</td>
+                            <td id="num43" class="Bingotd">4</td>
+                            <td id="num44" class="Bingotd">5</td>
+                        </tr>
+                    </table>
+                </div>
+                </div>
+                </div>
+                <div class="row userTextStyle" id="userText">
+                    <div class="col-md-6 col-md-offset-3">
+                    <p>TEXT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="footer">
+        <p class="navBarText">copyrights</p>
+    </div>
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/socket.io.js"></script>
+        <script>
+        //we need a socket that can send our messages to the server so it will send our messages to the server that is working         //on("http://cmpassign3.cloudapp.net:22445")
+        //socket is our communication variable anything that the client needs to send to the server will be sent on it 
+        //any information that the server needs to send to the client will be recieved from this socket
+        var socket =io("http://cmpassign3.cloudapp.net:22445");
+        //serverTurn has the value of Turn which the server sends to the client so that the client knows if this id his turn or not
+        var serverTurn;
+        //server sends me my ID client will use ID to check if this is his turn or not   
+        var myID;
+
+        var myGameID;                                   
+    
+        var checkEND = false;    
+        var checkmyID;   
+	//raniatarek	
+        var checkdisconnect = false ;
+
+        //when my socket is disconnected from server this function() will be called
+        //Event:socket disconnected from server ,Hanlder:function()
+        socket.on("disconnect",function(){
+        console.log("disconnected");
+        //this prints to the client a message that says he is disconnected
+        $("#userText").text("Disconnected");
+        });
+        
+        //when my socket is connected to the server this function() will be called
+        //Event:socket connected to the server ,Hanlder:function()
+        socket.on("connect",function(){
+        console.log("connected");
+        $("#userText").text("connected");
+        });
+        
+       /* socket.on("message",function(message){
+        console.log("recieving message");
+        $("#userText").text(message);
+        });*/
+        
+        //recieving Turn variable from server
+        //Event: Turn,Handler:function(Turn)
+       //hanlder for Turn                           
+        socket.on("Turn",function(Turn , arrOfGamePlayers , myidPlayer){
+    // recieve turn for players in this game only 
+    
+    //1- if player not in a game   
+    if(arrOfGamePlayers.length == 0 )
+    {
+        if(Turn==myID)
+            $("#userText").text("Your Turn");
+        else 
+            $("#userText").text("opponent's Turn");
+      
+        serverTurn=Turn;
+    }
+    
+    //2-
+    //2.1- check if myID in this game
+    checkmyID=false;
+    for(var i=0; i< arrOfGamePlayers.length ; i++)        
+     {
+     console.log("myID = " + myID + " and  arrOfGamePlayers[i].id = " +arrOfGamePlayers[i].id);
+       if(myID == arrOfGamePlayers[i].id )
+     {
+     checkmyID = true;
+     break;
+     }
+     
+     }
+     
+     //if true
+     if(checkmyID == true )
+        {   
+        console.log("Server Turn ----------- = : " +Turn);
+    
+    
+    //-----------------------------------------------------
+        if(Turn == myID)//if Turn is mine then this condition is true 
+            $("#userText").text("Your Turn");
+        else 
+            $("#userText").text("Oponent's Turn");
+      
+        serverTurn=Turn;
+    }
+        
+        });
+    
+    
+        //hanlder for yourID
+        socket.on("yourID",function(ID){
+    
+        console.log("recieving ID:" + ID);
+        myID = ID;
+    
+        });
+    
+
+    //handler for winners
+        socket.on("winners",function(array_w , arr_GamePlayers){
+    
+    //check if my id in the players in this game 
+    checkmyID=false;
+     for(var i=0; i< arr_GamePlayers.length ; i++)
+     {
+       if(myID == arr_GamePlayers[i].id )
+     {
+     checkmyID=true;
+     break;
+     }
+     }
+    if(checkmyID == true )
+               {   
+     
+    $("#userText").text("Winners in Our Game ^_^  :  Player " + array_w );
+    checkEND = true ;
+    }
+    console.log("========checkEND in handler of winners "+ checkEND);
+        });
+    
+                          
+        //handler for  color_num   
+        socket.on("color_num",function(num , arr_GamePlayers){
+    //check if my id in the players in this game
+       checkmyID=false;
+     for(var i=0; i< arr_GamePlayers.length ; i++)
+     {
+       if(myID == arr_GamePlayers[i].id )
+     {
+     checkmyID=true;
+     break;
+     }
+     }
+    if(checkmyID == true )
+               {   
+           var numID2=["#num00","#num01","#num02","#num03","#num04",
+                        "#num10","#num11","#num12","#num13","#num14",
+                        "#num20","#num21","#num22","#num23","#num24",
+                        "#num30","#num31","#num32","#num33","#num34",
+                        "#num40","#num41","#num42","#num43","#num44"];
+            for (i = 0; i < numID2.length; i++) { 
+            if($(numID2[i]).text() == num)
+        $(numID2[i]).css({'color':'white','background-color':'#f05c79'}); 
+      }
+      }
+    
+        });
+    
+    
+    //(2)--->If num is clicked 
+        var color = '';
+        $("td").click(function(event){
+		
+		
+		var x = $(this).css('color');   //ronyana 
+        hexc(x);                         //ronyana 
+    
+    if(checkEND == false && checkdisconnect == false)    // if no winners yet, game not END
+    {
+    
+       if(serverTurn != myID)   // if it is not my turn to play              
+         $("#userText").text("Please wait , it is not your turn Now ");
+      else{
+    
+               if(color=="#ffffff")     // if player pressed repeated number 
+                 $("#userText").text("please choose another number");
+               else{
+      
+                 //sending the number that i chose to the server
+             socket.emit("sendingMyNumber",$(this).text() ,myID );   
+                 // Check if any Player win 
+             socket.emit("CheckWinPlayers", myID , $(this).text());                        
+     
+               }
+               } 
+        }    
+        });
+		
+		
+			//ronyana
+		//function used in coloring 
+        function hexc(colorval) {
+            var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            delete(parts[0]);
+            for (var i = 1; i <= 3; ++i) {
+                parts[i] = parseInt(parts[i]).toString(16);
+                if (parts[i].length == 1) parts[i] = '0' + parts[i];
+            }
+            color = '#' + parts.join('');
+        }
+
+          
+        //(1)----> when client presses on start game                      
+        $("#startGame").click(function(event){ 
+                                       
+            //sending array to server on socket
+            var my_array=[];
+            //first we get the numbers from bingo table
+            var numID=["#num00","#num01","#num02","#num03","#num04",
+                        "#num10","#num11","#num12","#num13","#num14",
+                        "#num20","#num21","#num22","#num23","#num24",
+                        "#num30","#num31","#num32","#num33","#num34",
+                        "#num40","#num41","#num42","#num43","#num44"];
+            
+            for (i = 0; i < numID.length; i++) 
+      { 
+               my_array.push($(numID[i]).text());
+      }
+        //then we send the array on the socket
+        var un = getCookie("Username");
+        un = un.replace(/%20/g, " ");
+        var email = getCookie("Email");
+        email = email.replace(/%40/g, "@");
+        var type = getCookie("Type");
+        console.log("Esraa Mostafa: username : " + un);
+              socket.emit("playerArray", my_array, un ,email, type);//Esraa Mostafa:
+            });
+      
+     //handler for showContent of game 
+      socket.on("showContent",function(test_result){
+
+      if (test_result == true) 
+      {
+      $("table").show();
+            $("#startGameRow").hide();//hides start game button
+            $("#userText").show();  
+			$("#bingoText").show();
+      }
+      else
+      {
+      $("table").hide();
+      $("#startGameRow").hide();
+      alert("Hello\Welcom to the Game, please wait for another player");
+      }
+    
+        });
+    
+     //handler for wakeUp_first player that waiting for another player to play with
+    socket.on("wakeUp_first_Player" , function(sleepPlayer)                  
+      {
+      if(myID == sleepPlayer)
+      {
+      $("table").show();
+            $("#startGameRow").hide();//hides start game button
+            $("#userText").show(); 
+			$("#bingoText").show();
+      }
+      });
+      
+      
+		//raniatarek
+			//handler for color bingo 
+					socket.on("color_bingo" , function(arr_GamePlayers)      //RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR            
+			{
+			var playerChoosed ;
+                    
+					//check if my id in the players in this game
+       checkmyID=false;
+	   for(var i=0; i< arr_GamePlayers.length ; i++)
+	   {
+	     if(myID == arr_GamePlayers[i].id )
+		 {
+		 checkmyID=true;
+		 playerChoosed = arr_GamePlayers[i];
+		 break;
+		 }
+	   }
+		if(checkmyID == true )
+			         {   
+			                 if(playerChoosed.Bingo == 1 )
+							 {
+							 $("#B").css({'color':'#DC143C'});
+							 }
+							 if(playerChoosed.Bingo == 2 )
+							 {
+							 $("#B").css({'color':'#DC143C'}); 
+							 $("#I").css({'color':'#DC143C'});
+							 }
+							 if(playerChoosed.Bingo == 3 )
+							 {
+							 $("#B").css({'color':'#DC143C'});
+							 $("#I").css({'color':'#DC143C'});
+							 $("#N").css({'color':'#DC143C'});
+							 }
+							 if(playerChoosed.Bingo == 4 )
+							 {
+							 $("#B").css({'color':'#DC143C'});
+							 $("#I").css({'color':'#DC143C'});
+							 $("#N").css({'color':'#DC143C'});
+							 $("#G").css({'color':'#DC143C'});
+							 }
+							 if(playerChoosed.Bingo >= 5 )
+							 {
+							 $("#B").css({'color':'#DC143C'});
+							 $("#I").css({'color':'#DC143C'});
+							 $("#N").css({'color':'#DC143C'});
+							 $("#G").css({'color':'#DC143C'});
+							 $("#O").css({'color':'#DC143C'});
+							 }
+			              
+			}
+			});
+			
+			
+			
+			//raniatarek
+			//handler for disconnected_player
+			socket.on("disconnected_player" , function(disconnectedPlayer , GamePlayers)                  
+			    {
+			 //check if my id in the players in this game
+                checkmyID = false;
+	             for(var i = 0; i < GamePlayers.length ; i++)
+	                {
+	                 if(myID == GamePlayers[i].id )
+		                {
+		                 checkmyID = true;
+		                 break;
+		                }
+	                }
+					
+		        if(checkmyID == true )
+			         {  
+                      $("#userText").text("Sorry Player " + disconnectedPlayer + " got disconnected , Please try to play again with another player ");
+					  checkdisconnect = true ;
+					 }
+			
+			   });
+			
+        //Esraa Mostafa:odeha zai mahya :D
+  function getCookie(cname) {
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i = 0; i <ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0)==' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length,c.length);
+                    }
+                }
+                return "";
+            };
+      
+        </script>
+    </body>
+</html>
+

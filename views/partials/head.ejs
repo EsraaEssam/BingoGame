@@ -1,0 +1,40 @@
+<head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      
+      <link rel="stylesheet" href="css/bootstrap.css">
+      <link rel="stylesheet" href="css/MyStyle.css">
+      
+     <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+     <![endif]-->
+      <script src="js/jquery-2.1.4.min.js"></script>
+      <script >
+          $(document).ready(function(){
+            console.log("profile is getting ready event");
+            console.log(document.cookie);
+            //console.log(getCookie("Username"));
+            $("#Username_profile").text(getCookie("Username").replace(/%20/g, " "));
+			$("#Email_profile").text(getCookie("Email2").replace(/%40/g, "@"));
+            //function to get username cookie from cookies
+            function getCookie(cname) {
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i = 0; i <ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0)==' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length,c.length);
+                    }
+                }
+                return "";
+            }
+          });
+            
+      </script>
+      <title>Bingo!</title>
+  </head>
