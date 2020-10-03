@@ -1,2 +1,7 @@
 # node modules folder
 node_modules/
+
+#players data
+Players_Data/facebook
+Players_Data/mail
+Players_Data/twitter
